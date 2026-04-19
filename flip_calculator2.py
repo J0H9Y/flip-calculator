@@ -287,7 +287,7 @@ TRANSLATIONS = {
 
 ⚠️ **Disclaimer:** Simplified calculations. Consult Steuerberater for actual tax planning.
 
-🔧 **Zero Cost Stack:** Python + Streamlit + Plotly • Run: `streamlit run flip_calculator.py`
+Alle Steuerangaben basieren auf 2026-Regeln und können sich ändern. Keine Haftung für Aktualität oder individuelle Fälle.
 """,
     },
 }
