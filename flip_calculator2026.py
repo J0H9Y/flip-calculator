@@ -41,6 +41,8 @@ TRANSLATIONS = {
         "strategy_both": "Vergleich beider Varianten",
         "sell_price_label": "Verkaufspreis (€)",
         "makler_sell_label": "Verkäuferprovision zahlen (3,57 %)",
+        "eigennutzung_label": "Eigennutzung (§ 23 EStG): Selbst bewohnt im Verkaufsjahr und den beiden Vorjahren",
+        "eigennutzung_help": "Bei nachgewiesener Eigennutzung entfällt die Spekulationssteuer – auch bei Verkauf vor 10 Jahren.",
         "monthly_rent_label": "Monatliche Kaltmiete (€)",
         "vacancy_label": "Leerstandsquote (%)",
         "vacancy_help": "Erwarteter Anteil der Zeit ohne Mieter",
@@ -139,16 +141,16 @@ TRANSLATIONS = {
         "na": "k. A.",
         # Footer
         "footer": """
-💡 **Steuerhinweise (2026):**
-- **Grunderwerbsteuer:** 6,5 % in NRW (je nach Bundesland unterschiedlich)
-- **Spekulationssteuer:** Gewinn wird progressiv besteuert bei Verkauf < 10 Jahre (14–45 % + Soli)
-- **Vorsteuerabzug:** 19 % auf fakturierte Materialien/Leistungen (ordnungsgemäße Belege erforderlich)
-- **Mieteinkommensteuer:** Wird dem Jahreseinkommen hinzugerechnet, progressive Besteuerung
-- **10-Jahres-Regel:** Ab 10 Jahren Haltedauer ist der Verkaufsgewinn steuerfrei
+💡 **Steuerhinweise (Stand April 2026):**
+- Grunderwerbsteuer: 6,5 % in NRW
+- Spekulationssteuer: fällig bei Verkauf < 10 Jahre (progressiv bis 45 % + Soli)
+- Eigennutzung-Ausnahme: Bei Selbstnutzung im Verkaufsjahr + den beiden Vorjahren ist der Verkauf steuerfrei (auch < 10 Jahre)
+- Vorsteuerabzug: 19 % auf ordnungsgemäß fakturierte Renovierungskosten
+- Mieteinkünfte: Werden dem Jahreseinkommen zugerechnet und progressiv besteuert
 
-⚠️ **Hinweis:** Vereinfachte Berechnungen. Bitte einen Steuerberater für die konkrete Steuerplanung hinzuziehen.
+⚠️ Dies ist eine vereinfachte Berechnung. Für verbindliche Steuerplanung bitte einen Steuerberater konsultieren.
 
-🔧 **Zero-Cost-Stack:** Python + Streamlit + Plotly • Starten mit: `streamlit run flip_calculator.py`
+Alle Steuerangaben basieren auf 2026-Regeln und können sich ändern. Keine Haftung für Aktualität oder individuelle Fälle.
 """,
     },
     "en": {
@@ -180,6 +182,8 @@ TRANSLATIONS = {
         "strategy_both": "Compare Both",
         "sell_price_label": "Sell Price (€)",
         "makler_sell_label": "Pay Sell-Side Makler (3.57%)",
+        "eigennutzung_label": "Owner-occupied (§ 23 EStG): Self-used in year of sale and the two prior years",
+        "eigennutzung_help": "If self-occupancy is proven, speculation tax is waived – even if sold before 10 years.",
         "monthly_rent_label": "Monthly Rent (€)",
         "vacancy_label": "Vacancy Rate (%)",
         "vacancy_help": "Expected % of time unrented",
@@ -278,16 +282,16 @@ TRANSLATIONS = {
         "na": "N/A",
         # Footer
         "footer": """
-💡 **Tax Notes (2026):**
-- **Grunderwerbsteuer:** 6.5% in NRW (varies by Bundesland)
-- **Speculation Tax:** Profit taxed progressively if sold <10 years (14-45% + Soli)
-- **VAT Reclaim:** 19% on invoiced materials/labor (requires proper documentation)
-- **Rental Income Tax:** Added to annual income, taxed progressively
-- **10-Year Rule:** Hold 10+ years for tax-free sale profit
+💡 **Tax Notes (as of April 2026):**
+- Grunderwerbsteuer: 6.5% in NRW
+- Speculation tax: due if sold <10 years (progressive up to 45% + Soli)
+- Owner-occupancy exception: tax-free sale if self-used in year of sale + 2 prior years (even <10 years, per § 23 EStG)
+- VAT reclaim: 19% on properly invoiced renovation costs
+- Rental income: added to annual income and taxed progressively
 
-⚠️ **Disclaimer:** Simplified calculations. Consult Steuerberater for actual tax planning.
+⚠️ Simplified calculations. Consult a Steuerberater for binding tax advice.
 
-Alle Steuerangaben basieren auf 2026-Regeln und können sich ändern. Keine Haftung für Aktualität oder individuelle Fälle.
+All tax figures are based on 2026 rules and may change. No liability for accuracy or individual cases.
 """,
     },
 }
@@ -326,7 +330,8 @@ TAX_RATES = {
         (float('inf'), 0.45)
     ],
     "soli": 0.055,
-    "soli_threshold": 18130
+    "soli_threshold": 20350,        # 2026 single person threshold
+    "soli_threshold_joint": 40700   # 2026 for married/joint filing
 }
 
 # ──────────────────────────────────────────────
@@ -368,7 +373,8 @@ def calculate_speculation_tax(profit, hold_years, annual_income=50000):
     return speculation_tax, effective_rate
 
 def calculate_sell_scenario(buy_price, reno_costs, holding_costs_monthly, hold_months,
-                            sell_price, vat_reclaim_pct, annual_income, use_sell_makler):
+                            sell_price, vat_reclaim_pct, annual_income, use_sell_makler,
+                            eigennutzung=False):
     grunderwerbsteuer = buy_price * TAX_RATES["grunderwerbsteuer_nrw"]
     notar_grundbuch = buy_price * TAX_RATES["notar_grundbuch"]
     makler_buy = buy_price * TAX_RATES["makler_buy"]
@@ -380,7 +386,11 @@ def calculate_sell_scenario(buy_price, reno_costs, holding_costs_monthly, hold_m
     selling_costs = makler_sell
     gross_profit = sell_price - total_investment - selling_costs
     hold_years = hold_months / 12
-    speculation_tax, spec_tax_rate = calculate_speculation_tax(gross_profit, hold_years, annual_income)
+    # § 23 EStG Eigennutzung-Ausnahme: steuerfrei bei Selbstnutzung im Verkaufsjahr + 2 Vorjahre
+    if eigennutzung:
+        speculation_tax, spec_tax_rate = 0, 0
+    else:
+        speculation_tax, spec_tax_rate = calculate_speculation_tax(gross_profit, hold_years, annual_income)
     net_profit = gross_profit - speculation_tax
     roi = (net_profit / total_investment * 100) if total_investment > 0 else 0
     annual_roi = (roi / hold_years) if hold_years > 0 else 0
@@ -531,6 +541,7 @@ with col3:
 
     sell_price = 350000
     use_sell_makler = False
+    eigennutzung = False
     monthly_rent = 1200
     vacancy_rate = 0.05
 
@@ -538,6 +549,8 @@ with col3:
         sell_price = st.number_input(T["sell_price_label"], min_value=0, max_value=2000000,
                                      value=350000, step=10000)
         use_sell_makler = st.checkbox(T["makler_sell_label"], value=False)
+        eigennutzung = st.checkbox(T["eigennutzung_label"], value=False,
+                                   help=T["eigennutzung_help"])
 
     if scenario_type in ["Rent", "Compare Both"]:
         monthly_rent = st.number_input(T["monthly_rent_label"], min_value=0, max_value=20000,
@@ -555,7 +568,8 @@ if st.button(T["calc_button"], type="primary"):
     if scenario_type in ["Sell", "Compare Both"]:
         results["sell"] = calculate_sell_scenario(
             buy_price, reno_costs, holding_costs_monthly, hold_months,
-            sell_price, vat_reclaim_pct, annual_income, use_sell_makler
+            sell_price, vat_reclaim_pct, annual_income, use_sell_makler,
+            eigennutzung=eigennutzung
         )
 
     if scenario_type in ["Rent", "Compare Both"]:
