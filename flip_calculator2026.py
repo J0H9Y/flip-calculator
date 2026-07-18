@@ -489,7 +489,8 @@ def calculate_speculation_tax(profit, hold_years, annual_income=50000):
     tax_without_profit = calculate_income_tax(annual_income)
     tax_with_profit = calculate_income_tax(annual_income + profit)
     speculation_tax = tax_with_profit - tax_without_profit
-    effective_rate = (speculation_tax / profit * 100) if profit > 0 else 0
+    # Calculate effective rate based on profit (use absolute value for losses to show meaningful rate)
+    effective_rate = (speculation_tax / abs(profit) * 100) if profit != 0 else 0
     return speculation_tax, effective_rate
 
 def calculate_sell_scenario(buy_price, reno_costs, holding_costs_monthly, hold_months,
@@ -628,7 +629,7 @@ def check_gewerblicher_grundstueckshandel(properties_sold_5y, hold_years):
     Returns:
         Dictionary with check results
     """
-    is_gewerblich = properties_sold_5y >= 3 and hold_years < 5
+    is_gewerblich = properties_sold_5y >= 3 and hold_years <= 5
     
     return {
         "is_gewerblich": is_gewerblich,
@@ -885,7 +886,8 @@ def calculate_sell_scenario_with_afa(buy_price, reno_costs, holding_costs_monthl
             tax_without = calculate_income_tax(annual_income)
             tax_with = calculate_income_tax(annual_income + taxable_gain_with_recapture)
             speculation_tax_with_recapture = tax_with - tax_without
-            spec_tax_rate_with_recapture = (speculation_tax_with_recapture / taxable_gain_with_recapture * 100) if taxable_gain_with_recapture > 0 else 0
+            # Calculate effective rate based on taxable gain (use absolute value for losses)
+            spec_tax_rate_with_recapture = (speculation_tax_with_recapture / abs(taxable_gain_with_recapture) * 100) if taxable_gain_with_recapture != 0 else 0
         
         # Update result with AfA information
         result["afa"] = {
