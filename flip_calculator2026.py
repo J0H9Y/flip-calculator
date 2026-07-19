@@ -82,6 +82,7 @@ TRANSLATIONS = {
         "spec_tax_warning": "⚠️ Verkauf innerhalb von 10 Jahren ({years:.1f} J.) – Spekulationssteuer fällig!",
         "spec_tax_rate_line": "Effektiver Steuersatz: {rate:.1f} %",
         "spec_tax_rate_note": "Berechnet progressiv auf Basis von Jahreseinkommen + Veräußerungsgewinn; weicht daher vom eingestellten Grenzsteuersatz ab.",
+        "loss_restriction_note": "Kein steuerpflichtiger Gewinn — keine Spekulationssteuer fällig. Verlustverrechnung ist nach § 23 EStG nur mit anderen privaten Veräußerungsgewinnen möglich, nicht mit sonstigem Einkommen (hier nicht berücksichtigt).",
         "tax_free_success": "✓ Gehalten: {years:.1f} Jahre – steuerfrei!",
         "invest_same": "**Investition** (wie Verkaufsvariante)",
         "total_invest_line": "• Gesamtinvestition",
@@ -284,6 +285,7 @@ Alle Steuerangaben basieren auf 2026-Regeln und können sich ändern. Keine Haft
         "spec_tax_warning": "⚠️ Sold within 10 years ({years:.1f}y) - speculation tax applies!",
         "spec_tax_rate_line": "Effective tax rate: {rate:.1f}%",
         "spec_tax_rate_note": "Calculated progressively based on annual income + capital gain; therefore differs from the set marginal tax rate.",
+        "loss_restriction_note": "No taxable profit — no speculation tax due. Loss offset is only possible with other private sales gains under § 23 EStG, not with other income (not considered here).",
         "tax_free_success": "✓ Held {years:.1f} years - tax-free!",
         "invest_same": "**Investment** (Same as Sell)",
         "total_invest_line": "• Total Investment",
@@ -487,6 +489,9 @@ def calculate_income_tax(taxable_income):
 
 def calculate_speculation_tax(profit, hold_years, annual_income=50000):
     if hold_years >= 10:
+        return 0, 0
+    if profit <= 0:
+        # Losses can't offset ordinary income under § 23 EStG loss-restriction rules
         return 0, 0
     tax_without_profit = calculate_income_tax(annual_income)
     tax_with_profit = calculate_income_tax(annual_income + profit)
@@ -884,6 +889,10 @@ def calculate_sell_scenario_with_afa(buy_price, reno_costs, holding_costs_monthl
         if eigennutzung or hold_years >= 10:
             speculation_tax_with_recapture = 0
             spec_tax_rate_with_recapture = 0
+        elif taxable_gain_with_recapture <= 0:
+            # Losses can't offset ordinary income under § 23 EStG loss-restriction rules
+            speculation_tax_with_recapture = 0
+            spec_tax_rate_with_recapture = 0
         else:
             tax_without = calculate_income_tax(annual_income)
             tax_with = calculate_income_tax(annual_income + taxable_gain_with_recapture)
@@ -1221,8 +1230,11 @@ if st.button(T["calc_button"], type="primary"):
                       delta=f"{sell['roi']:.1f}% ROI")
         with c3:
             if sell['hold_years'] < 10:
-                st.metric(T["speculation_tax"], f"€{sell['speculation_tax']:,.0f}",
-                          delta=f"{sell['spec_tax_rate']:.1f}%", delta_color="inverse")
+                if sell['speculation_tax'] == 0 and sell['gross_profit'] <= 0:
+                    st.metric(T["speculation_tax"], "€0", delta="Loss restriction", delta_color="normal")
+                else:
+                    st.metric(T["speculation_tax"], f"€{sell['speculation_tax']:,.0f}",
+                              delta=f"{sell['spec_tax_rate']:.1f}%", delta_color="inverse")
             else:
                 st.metric(T["speculation_tax"], "€0", delta=T["tax_free"], delta_color="normal")
         with c4:
@@ -1251,9 +1263,12 @@ if st.button(T["calc_button"], type="primary"):
 
                 st.markdown(T["tax_info"])
                 if sell['hold_years'] < 10:
-                    st.warning(T["spec_tax_warning"].format(years=sell['hold_years']))
-                    st.write(T["spec_tax_rate_line"].format(rate=sell['spec_tax_rate']))
-                    st.caption(T["spec_tax_rate_note"])
+                    if sell['speculation_tax'] == 0 and sell['gross_profit'] <= 0:
+                        st.info(T["loss_restriction_note"])
+                    else:
+                        st.warning(T["spec_tax_warning"].format(years=sell['hold_years']))
+                        st.write(T["spec_tax_rate_line"].format(rate=sell['spec_tax_rate']))
+                        st.caption(T["spec_tax_rate_note"])
                 else:
                     st.success(T["tax_free_success"].format(years=sell['hold_years']))
 
