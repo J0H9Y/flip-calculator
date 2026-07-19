@@ -496,7 +496,7 @@ def calculate_speculation_tax(profit, hold_years, annual_income=50000):
     tax_without_profit = calculate_income_tax(annual_income)
     tax_with_profit = calculate_income_tax(annual_income + profit)
     speculation_tax = tax_with_profit - tax_without_profit
-    # Calculate effective rate based on profit (use absolute value for losses to show meaningful rate)
+    # Effective rate is always based on a positive profit here, since losses are already handled above
     effective_rate = (speculation_tax / abs(profit) * 100) if profit != 0 else 0
     return speculation_tax, effective_rate
 
@@ -897,7 +897,7 @@ def calculate_sell_scenario_with_afa(buy_price, reno_costs, holding_costs_monthl
             tax_without = calculate_income_tax(annual_income)
             tax_with = calculate_income_tax(annual_income + taxable_gain_with_recapture)
             speculation_tax_with_recapture = tax_with - tax_without
-            # Calculate effective rate based on taxable gain (use absolute value for losses)
+            # Effective rate is always based on a positive taxable gain here, since losses are already handled above
             spec_tax_rate_with_recapture = (speculation_tax_with_recapture / abs(taxable_gain_with_recapture) * 100) if taxable_gain_with_recapture != 0 else 0
         
         # Update result with AfA information
