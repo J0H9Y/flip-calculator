@@ -81,6 +81,7 @@ TRANSLATIONS = {
         "tax_info": "**Steuerhinweis**",
         "spec_tax_warning": "⚠️ Verkauf innerhalb von 10 Jahren ({years:.1f} J.) – Spekulationssteuer fällig!",
         "spec_tax_rate_line": "Effektiver Steuersatz: {rate:.1f} %",
+        "spec_tax_rate_note": "Berechnet progressiv auf Basis von Jahreseinkommen + Veräußerungsgewinn; weicht daher vom eingestellten Grenzsteuersatz ab.",
         "tax_free_success": "✓ Gehalten: {years:.1f} Jahre – steuerfrei!",
         "invest_same": "**Investition** (wie Verkaufsvariante)",
         "total_invest_line": "• Gesamtinvestition",
@@ -195,7 +196,7 @@ TRANSLATIONS = {
         "anschaffungsnahe_warning": "⚠️ Anschaffungsnahe Herstellungskosten: Renovierungskosten übersteigen 15% des Gebäudewerts innerhalb von 3 Jahren nach Kauf.",
         "anschaffungsnahe_info": "In diesem Fall müssen Renovierungskosten nicht als sofort abzugsfähige Werbungskosten behandelt werden, sondern in die Anschaffungskosten/Herstellungskosten kapitalisiert und über AfA abgeschrieben werden.",
         "anschaffungsnahe_percentage": "Renovierungskosten / Gebäudewert: {percentage:.1f}%",
-        "gewerblich_warning": "⚠️ Risiko: Gewerblicher Grundstückshandel. Bei mehr als 3 Objektverkäufen innerhalb von 5 Jahren kann das Finanzamt die Tätigkeit als gewerblich einstufen. Folge: Kein steuerfreier Verkauf nach 10 Jahren, zusätzlich Gewerbesteuer, laufende Buchführungspflicht.",
+        "gewerblich_warning": "⚠️ Risiko: Gewerblicher Grundstückshandel. Bei 3 oder mehr Objektverkäufen innerhalb von 5 Jahren kann das Finanzamt die Tätigkeit als gewerblich einstufen. Folge: Kein steuerfreier Verkauf nach 10 Jahren, zusätzlich Gewerbesteuer, laufende Buchführungspflicht.",
         "compliance_disclaimer": "Dies ist eine vereinfachte Berechnung ohne Berücksichtigung individueller Umstände (z. B. Gewerblicher Grundstückshandel, anschaffungsnahe Herstellungskosten, Kirchensteuer, Verlustverrechnung). Für verbindliche Aussagen einen Steuerberater konsultieren.",
         # Footer
         "footer": """
@@ -282,6 +283,7 @@ Alle Steuerangaben basieren auf 2026-Regeln und können sich ändern. Keine Haft
         "tax_info": "**Tax Info**",
         "spec_tax_warning": "⚠️ Sold within 10 years ({years:.1f}y) - speculation tax applies!",
         "spec_tax_rate_line": "Effective tax rate: {rate:.1f}%",
+        "spec_tax_rate_note": "Calculated progressively based on annual income + capital gain; therefore differs from the set marginal tax rate.",
         "tax_free_success": "✓ Held {years:.1f} years - tax-free!",
         "invest_same": "**Investment** (Same as Sell)",
         "total_invest_line": "• Total Investment",
@@ -396,7 +398,7 @@ Alle Steuerangaben basieren auf 2026-Regeln und können sich ändern. Keine Haft
         "anschaffungsnahe_warning": "⚠️ Acquisition-related production costs: Renovation costs exceed 15% of building value within 3 years of purchase.",
         "anschaffungsnahe_info": "In this case, renovation costs must not be treated as immediately deductible business expenses, but must be capitalized into acquisition/production costs and depreciated via AfA.",
         "anschaffungsnahe_percentage": "Renovation costs / Building value: {percentage:.1f}%",
-        "gewerblich_warning": "⚠️ Risk: Commercial property trading. With more than 3 property sales within 5 years, the tax office may reclassify the activity as commercial. Consequence: No tax-free sale after 10 years, additional trade tax, ongoing bookkeeping requirement.",
+        "gewerblich_warning": "⚠️ Risk: Commercial property trading. With 3 or more property sales within 5 years, the tax office may reclassify the activity as commercial. Consequence: No tax-free sale after 10 years, additional trade tax, ongoing bookkeeping requirement.",
         "compliance_disclaimer": "This is a simplified calculation without considering individual circumstances (e.g., commercial property trading, acquisition-related production costs, church tax, loss offset). Consult a tax advisor for binding advice.",
         # Footer
         "footer": """
@@ -1251,6 +1253,7 @@ if st.button(T["calc_button"], type="primary"):
                 if sell['hold_years'] < 10:
                     st.warning(T["spec_tax_warning"].format(years=sell['hold_years']))
                     st.write(T["spec_tax_rate_line"].format(rate=sell['spec_tax_rate']))
+                    st.caption(T["spec_tax_rate_note"])
                 else:
                     st.success(T["tax_free_success"].format(years=sell['hold_years']))
 
