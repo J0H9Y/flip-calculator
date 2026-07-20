@@ -156,6 +156,17 @@ TRANSLATIONS = {
         "land_percentage_help": "Automatische Aufteilung: X % Land, (100-X) % Gebäude",
         "denkmal_costs_label": "Denkmal-AfA-fähige Sanierungskosten (€)",
         "denkmal_costs_help": "Zertifizierte Renovierungskosten für Denkmal-AfA (9% für 8 Jahre, dann 7% für 4 Jahre)",
+        "custom_nutzungsdauer_label": "Individuelle Nutzungsdauer per Gutachten geltend machen (§ 7 Abs. 4 Satz 2 EStG)",
+        "custom_nutzungsdauer_help": "Der Steuerpflichtige trägt die Nachweislast für eine kürzere tatsächliche Nutzungsdauer (BFH IX R 14/23). Das Finanzamt kann ein methodisch nachvollziehbares Gutachten nicht pauschal ablehnen, prüft aber im Einzelfall.",
+        "gutachten_year_label": "Jahr der Gutachten-Anerkennung",
+        "gutachten_year_help": "Jahr, in dem das Gutachten vom Finanzamt anerkannt wurde (muss ≥ Kaufjahr)",
+        "gutachten_restnutzungsdauer_label": "Vom Gutachten festgestellte Restnutzungsdauer (Jahre)",
+        "gutachten_restnutzungsdauer_help": "Restnutzungsdauer laut Gutachten, ab dem Anerkennungsjahr",
+        "gutachten_year_error": "Fehler: Das Gutachten-Anerkennungsjahr muss ≥ Kaufjahr sein.",
+        "gutachten_duration_error": "Fehler: Die Restnutzungsdauer muss > 0 Jahre betragen.",
+        "afa_basis_standard": "Standard",
+        "afa_basis_gutachten": "Gutachten",
+        "custom_nutzungsdauer_summary": "AfA-Basis ab {year}: Restnutzungsdauer {duration} Jahre lt. Gutachten (statt {original} Jahre Standard).",
         "marginal_tax_rate_label": "Grenzsteuersatz (%)",
         "marginal_tax_rate_help": "Dein persönlicher Grenzsteuersatz für Steuerschild-Berechnung (Standard: 42% + Soli)",
         "use_afa_label": "AfA berücksichtigen (für Vermietung)",
@@ -170,6 +181,7 @@ TRANSLATIONS = {
         "cumulative_afa_col": "Kumulative AfA (€)",
         "tax_shield_col": "Steuerschild (€)",
         "book_value_col": "Restbuchwert (€)",
+        "basis_col": "Basis",
         "total_afa_claimed": "Gesamt AfA geltend gemacht",
         "total_tax_shield": "Gesamter Steuervorteil",
         "remaining_book_value": "Verbleibender Buchwert",
@@ -359,6 +371,17 @@ Alle Steuerangaben basieren auf 2026-Regeln und können sich ändern. Keine Haft
         "land_percentage_help": "Automatic split: X% land, (100-X)% building",
         "denkmal_costs_label": "Denkmal-AfA Eligible Renovation Costs (€)",
         "denkmal_costs_help": "Certified renovation costs for Denkmal-AfA (9% for 8 years, then 7% for 4 years)",
+        "custom_nutzungsdauer_label": "Claim individual useful life per expert appraisal (§ 7 Abs. 4 Satz 2 EStG)",
+        "custom_nutzungsdauer_help": "The taxpayer bears the burden of proof for a shorter actual useful life (BFH IX R 14/23). The tax office cannot reject a methodologically comprehensible expert opinion outright, but examines it on a case-by-case basis.",
+        "gutachten_year_label": "Year of Expert Appraisal Recognition",
+        "gutachten_year_help": "Year when the expert appraisal was recognized by the tax office (must be ≥ acquisition year)",
+        "gutachten_restnutzungsdauer_label": "Remaining useful life determined by expert appraisal (years)",
+        "gutachten_restnutzungsdauer_help": "Remaining useful life per expert appraisal, from the recognition year",
+        "gutachten_year_error": "Error: The expert appraisal recognition year must be ≥ acquisition year.",
+        "gutachten_duration_error": "Error: The remaining useful life must be > 0 years.",
+        "afa_basis_standard": "Standard",
+        "afa_basis_gutachten": "Expert",
+        "custom_nutzungsdauer_summary": "AfA basis from {year}: Remaining useful life {duration} years per expert appraisal (instead of {original} years standard).",
         "marginal_tax_rate_label": "Marginal Tax Rate (%)",
         "marginal_tax_rate_help": "Your personal marginal tax rate for tax shield calculation (default: 42% + Soli)",
         "use_afa_label": "Include AfA (for rental)",
@@ -373,6 +396,7 @@ Alle Steuerangaben basieren auf 2026-Regeln und können sich ändern. Keine Haft
         "cumulative_afa_col": "Cumulative AfA (€)",
         "tax_shield_col": "Tax Shield (€)",
         "book_value_col": "Remaining Book Value (€)",
+        "basis_col": "Basis",
         "total_afa_claimed": "Total AfA Claimed",
         "total_tax_shield": "Total Tax Shield",
         "remaining_book_value": "Remaining Book Value",
@@ -682,10 +706,14 @@ def get_afa_rate(construction_year):
 def calculate_afa_schedule(total_purchase_price, land_value, land_percentage,
                            construction_year, acquisition_year, acquisition_month,
                            denkmal_costs, marginal_tax_rate, hold_years,
-                           annual_income, use_afa=True):
+                           annual_income, use_afa=True,
+                           custom_nutzungsdauer_active=False,
+                           gutachten_year=None,
+                           gutachten_restnutzungsdauer=None):
     """
     Calculate annual AfA schedule with pro-rating for partial years.
     Handles both normal linear AfA and Denkmal-AfA separately.
+    Supports custom useful life based on expert appraisal (§ 7 Abs. 4 Satz 2 EStG).
     
     Args:
         total_purchase_price: Total purchase price
@@ -699,6 +727,9 @@ def calculate_afa_schedule(total_purchase_price, land_value, land_percentage,
         hold_years: Holding period in years
         annual_income: User's annual income for tax shield calculation
         use_afa: Whether to include AfA in calculations
+        custom_nutzungsdauer_active: Whether to use custom useful life from expert appraisal
+        gutachten_year: Year when expert appraisal was recognized
+        gutachten_restnutzungsdauer: Remaining useful life per expert appraisal (years)
     
     Returns:
         Dictionary with AfA schedule and summary
@@ -758,22 +789,53 @@ def calculate_afa_schedule(total_purchase_price, land_value, land_percentage,
     # Convert marginal tax rate to decimal
     marginal_rate_decimal = marginal_tax_rate / 100 if marginal_tax_rate > 0 else 0.42
     
+    # Custom useful life from expert appraisal
+    custom_annual_afa = None
+    custom_nutzungsdauer_active_year = None
+    if custom_nutzungsdauer_active and gutachten_year is not None and gutachten_restnutzungsdauer is not None:
+        if gutachten_year >= acquisition_year:
+            custom_nutzungsdauer_active_year = gutachten_year - acquisition_year
+    
     for year_offset in range(int(hold_years) + 1):
         year = acquisition_year + year_offset
+        afa_basis = "Standard"
+        
+        # Check if we need to switch to custom useful life this year
+        if custom_nutzungsdauer_active and year_offset == custom_nutzungsdauer_active_year:
+            # Switch to custom useful life based on expert appraisal
+            custom_annual_afa = remaining_book_value / gutachten_restnutzungsdauer
+            afa_basis = "Gutachten"
         
         # Calculate normal AfA for this year
-        if year_offset == 0:
-            # First year (acquisition year) - pro-rated by month
-            normal_afa_this_year = annual_normal_afa * (months_first_year / 12)
-        elif year_offset < hold_years:
-            # Full years
-            normal_afa_this_year = annual_normal_afa
-        else:
-            # Partial final year if holding period is not integer
-            if months_last_year > 0:
-                normal_afa_this_year = annual_normal_afa * (months_last_year / 12)
+        if custom_nutzungsdauer_active and year_offset >= custom_nutzungsdauer_active_year and custom_annual_afa is not None:
+            # Use custom annual AfA from expert appraisal
+            if year_offset == custom_nutzungsdauer_active_year:
+                # First year of custom AfA - pro-rate if needed
+                normal_afa_this_year = custom_annual_afa * (months_first_year / 12) if year_offset == 0 else custom_annual_afa
+            elif year_offset < hold_years:
+                normal_afa_this_year = custom_annual_afa
             else:
-                normal_afa_this_year = 0
+                # Partial final year if holding period is not integer
+                if months_last_year > 0:
+                    normal_afa_this_year = custom_annual_afa * (months_last_year / 12)
+                else:
+                    normal_afa_this_year = 0
+            afa_basis = "Gutachten"
+        else:
+            # Use standard AfA rate
+            if year_offset == 0:
+                # First year (acquisition year) - pro-rated by month
+                normal_afa_this_year = annual_normal_afa * (months_first_year / 12)
+            elif year_offset < hold_years:
+                # Full years
+                normal_afa_this_year = annual_normal_afa
+            else:
+                # Partial final year if holding period is not integer
+                if months_last_year > 0:
+                    normal_afa_this_year = annual_normal_afa * (months_last_year / 12)
+                else:
+                    normal_afa_this_year = 0
+            afa_basis = "Standard"
         
         # Don't exceed remaining book value for normal AfA
         if normal_afa_this_year > remaining_book_value:
@@ -831,7 +893,8 @@ def calculate_afa_schedule(total_purchase_price, land_value, land_percentage,
             "total_afa": total_afa_this_year,
             "cumulative_afa": cumulative_afa,
             "tax_shield": tax_shield,
-            "book_value": remaining_book_value
+            "book_value": remaining_book_value,
+            "afa_basis": afa_basis
         })
     
     # Calculate total tax shield
@@ -849,7 +912,11 @@ def calculate_afa_schedule(total_purchase_price, land_value, land_percentage,
         "land_value": land_value_final,
         "denkmal_value": denkmal_value,
         "afa_rate": afa_rate,
-        "afa_description": afa_description
+        "afa_description": afa_description,
+        "custom_nutzungsdauer_active": custom_nutzungsdauer_active,
+        "gutachten_year": gutachten_year,
+        "gutachten_restnutzungsdauer": gutachten_restnutzungsdauer,
+        "useful_life_original": useful_life
     }
 
 def calculate_sell_scenario_with_afa(buy_price, reno_costs, holding_costs_monthly, hold_months,
@@ -1122,6 +1189,28 @@ with col_afa2:
         min_value=0, max_value=500000, value=0, step=1000,
         help=T["denkmal_costs_help"]
     )
+    custom_nutzungsdauer_active = st.checkbox(
+        T["custom_nutzungsdauer_label"], value=False,
+        help=T["custom_nutzungsdauer_help"]
+    )
+    gutachten_year = None
+    gutachten_restnutzungsdauer = None
+    if custom_nutzungsdauer_active:
+        gutachten_year = st.number_input(
+            T["gutachten_year_label"],
+            min_value=2000, max_value=2050, value=acquisition_year, step=1,
+            help=T["gutachten_year_help"]
+        )
+        gutachten_restnutzungsdauer = st.number_input(
+            T["gutachten_restnutzungsdauer_label"],
+            min_value=0.1, max_value=100.0, value=20.0, step=0.5,
+            help=T["gutachten_restnutzungsdauer_help"]
+        )
+        # Validation
+        if gutachten_year < acquisition_year:
+            st.error(T["gutachten_year_error"])
+        if gutachten_restnutzungsdauer <= 0:
+            st.error(T["gutachten_duration_error"])
 
 with col_afa3:
     marginal_tax_rate = st.slider(
@@ -1162,7 +1251,10 @@ if st.button(T["calc_button"], type="primary"):
         marginal_tax_rate=marginal_tax_rate,
         hold_years=hold_years_input,
         annual_income=annual_income,
-        use_afa=use_afa
+        use_afa=use_afa,
+        custom_nutzungsdauer_active=custom_nutzungsdauer_active,
+        gutachten_year=gutachten_year,
+        gutachten_restnutzungsdauer=gutachten_restnutzungsdauer
     )
 
     if scenario_type in ["Sell", "Compare Both"]:
@@ -1403,9 +1495,18 @@ if st.button(T["calc_button"], type="primary"):
             T["total_afa_col"], 
             T["cumulative_afa_col"], 
             T["tax_shield_col"], 
-            T["book_value_col"]
+            T["book_value_col"],
+            T["basis_col"]
         ]
         st.dataframe(afa_df, use_container_width=True, hide_index=True)
+        
+        # Custom useful life summary
+        if afa.get("custom_nutzungsdauer_active") and afa.get("gutachten_year"):
+            st.info(T["custom_nutzungsdauer_summary"].format(
+                year=afa["gutachten_year"],
+                duration=afa["gutachten_restnutzungsdauer"],
+                original=afa["useful_life_original"]
+            ))
         
         # AfA recapture info for sell scenario
         if "sell" in results and results["sell"].get("afa"):
@@ -1467,7 +1568,10 @@ if st.button(T["calc_button"], type="primary"):
                 "marginal_tax_rate": marginal_tax_rate,
                 "use_afa": use_afa,
                 "vat_option_active": vat_option_active,
-                "properties_sold_5y": properties_sold_5y
+                "properties_sold_5y": properties_sold_5y,
+                "custom_nutzungsdauer_active": custom_nutzungsdauer_active,
+                "gutachten_year": gutachten_year,
+                "gutachten_restnutzungsdauer": gutachten_restnutzungsdauer
             },
             "results": results,
             "created": datetime.now().isoformat()
