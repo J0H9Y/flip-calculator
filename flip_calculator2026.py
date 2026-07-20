@@ -706,7 +706,7 @@ def get_afa_rate(construction_year):
 def calculate_afa_schedule(total_purchase_price, land_value, land_percentage,
                            construction_year, acquisition_year, acquisition_month,
                            denkmal_costs, marginal_tax_rate, hold_years,
-                           annual_income, use_afa=True,
+                           annual_income,
                            custom_nutzungsdauer_active=False,
                            gutachten_year=None,
                            gutachten_restnutzungsdauer=None):
@@ -726,7 +726,6 @@ def calculate_afa_schedule(total_purchase_price, land_value, land_percentage,
         marginal_tax_rate: User's marginal tax rate (as percentage)
         hold_years: Holding period in years
         annual_income: User's annual income for tax shield calculation
-        use_afa: Whether to include AfA in calculations
         custom_nutzungsdauer_active: Whether to use custom useful life from expert appraisal
         gutachten_year: Year when expert appraisal was recognized
         gutachten_restnutzungsdauer: Remaining useful life per expert appraisal (years)
@@ -734,21 +733,6 @@ def calculate_afa_schedule(total_purchase_price, land_value, land_percentage,
     Returns:
         Dictionary with AfA schedule and summary
     """
-    if not use_afa:
-        return {
-            "use_afa": False,
-            "annual_schedule": [],
-            "total_normal_afa": 0,
-            "total_denkmal_afa": 0,
-            "total_afa_claimed": 0,
-            "total_tax_shield": 0,
-            "remaining_book_value": 0,
-            "building_value": 0,
-            "land_value": 0,
-            "denkmal_value": 0,
-            "afa_rate": 0,
-            "afa_description": "AfA deaktiviert"
-        }
     
     # Determine building value and land value
     if land_value is not None and land_value > 0:
@@ -901,7 +885,6 @@ def calculate_afa_schedule(total_purchase_price, land_value, land_percentage,
     total_tax_shield = sum(item["tax_shield"] for item in schedule)
     
     return {
-        "use_afa": True,
         "annual_schedule": schedule,
         "total_normal_afa": total_normal_afa,
         "total_denkmal_afa": total_denkmal_afa,
@@ -939,7 +922,7 @@ def calculate_sell_scenario_with_afa(buy_price, reno_costs, holding_costs_monthl
     )
     
     # Add AfA recapture if schedule provided
-    if afa_schedule and afa_schedule["use_afa"]:
+    if afa_schedule:
         total_afa_claimed = afa_schedule["total_afa_claimed"]
         total_normal_afa = afa_schedule["total_normal_afa"]
         total_denkmal_afa = afa_schedule["total_denkmal_afa"]
@@ -1011,7 +994,7 @@ def calculate_rent_scenario_with_afa(buy_price, reno_costs, holding_costs_monthl
     )
     
     # Add AfA tax shield if schedule provided
-    if afa_schedule and afa_schedule["use_afa"]:
+    if afa_schedule:
         hold_years = hold_months / 12
         
         # Calculate annual AfA tax shield
@@ -1251,7 +1234,6 @@ if st.button(T["calc_button"], type="primary"):
         marginal_tax_rate=marginal_tax_rate,
         hold_years=hold_years_input,
         annual_income=annual_income,
-        use_afa=use_afa,
         custom_nutzungsdauer_active=custom_nutzungsdauer_active,
         gutachten_year=gutachten_year,
         gutachten_restnutzungsdauer=gutachten_restnutzungsdauer
@@ -1465,7 +1447,7 @@ if st.button(T["calc_button"], type="primary"):
                 st.error(T["low_yield"])
 
     # ── AfA RESULTS ──────────────────────────────
-    if results.get("afa") and results["afa"]["use_afa"]:
+    if results.get("afa"):
         st.markdown("---")
         st.header(T["afa_header"])
         st.markdown(T["afa_subheader"])
