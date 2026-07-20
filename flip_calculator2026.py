@@ -169,8 +169,8 @@ TRANSLATIONS = {
         "custom_nutzungsdauer_summary": "AfA-Basis ab {year}: Restnutzungsdauer {duration} Jahre lt. Gutachten (statt {original} Jahre Standard).",
         "marginal_tax_rate_label": "Grenzsteuersatz (%)",
         "marginal_tax_rate_help": "Dein persönlicher Grenzsteuersatz für Steuerschild-Berechnung (Standard: 42% + Soli)",
-        "use_afa_label": "AfA berücksichtigen (für Vermietung)",
-        "use_afa_help": "AfA nur relevant bei Vermietungsszenario - mindert das zu versteuernde Einkommen",
+        "use_afa_label": "AfA im Mietrendite-Cashflow anzeigen",
+        "use_afa_help": "AfA wird im Mietrendite-Cashflow berücksichtigt (mindert das zu versteuernde Einkommen). Bei Verkauf wird AfA-Rückgängigmachung immer berechnet, wenn AfA aktiv ist.",
         "afa_rate_info": "AfA-Satz nach Baujahr: Vor 1925: 2,5 % | 1925-2022: 2 % | Ab 2023: 3 %",
         "denkmal_afa_info": "Denkmal-AfA: 9% p.a. für 8 Jahre, dann 7% für 4 Jahre auf zertifizierte Sanierungskosten",
         "annual_afa_table": "Jährliche AfA-Aufschlüsselung",
@@ -384,8 +384,8 @@ Alle Steuerangaben basieren auf 2026-Regeln und können sich ändern. Keine Haft
         "custom_nutzungsdauer_summary": "AfA basis from {year}: Remaining useful life {duration} years per expert appraisal (instead of {original} years standard).",
         "marginal_tax_rate_label": "Marginal Tax Rate (%)",
         "marginal_tax_rate_help": "Your personal marginal tax rate for tax shield calculation (default: 42% + Soli)",
-        "use_afa_label": "Include AfA (for rental)",
-        "use_afa_help": "AfA only relevant for rental scenario - reduces taxable income",
+        "use_afa_label": "Show AfA in rental cashflow",
+        "use_afa_help": "AfA is factored into rental cashflow (reduces taxable income). AfA recapture on sale is always calculated when AfA is active.",
         "afa_rate_info": "AfA rate by construction year: Before 1925: 2.5% | 1925-2022: 2% | From 2023: 3%",
         "denkmal_afa_info": "Denkmal-AfA: 9% p.a. for 8 years, then 7% for 4 years on certified renovation costs",
         "annual_afa_table": "Annual AfA Breakdown",
@@ -1262,7 +1262,7 @@ if st.button(T["calc_button"], type="primary"):
             buy_price, reno_costs, holding_costs_monthly, hold_months,
             sell_price, vat_reclaim_pct, annual_income, use_sell_makler,
             eigennutzung=eigennutzung,
-            afa_schedule=afa_schedule if use_afa else None
+            afa_schedule=afa_schedule
         )
 
     if scenario_type in ["Rent", "Compare Both"]:
