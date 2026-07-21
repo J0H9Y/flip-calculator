@@ -758,8 +758,13 @@ def calculate_afa_schedule(total_purchase_price, land_value, land_percentage,
     # Calculate months in first year (acquisition year)
     months_first_year = 12 - acquisition_month + 1  # e.g., July = month 7, so 6 months (July-Dec)
     
-    # Calculate months in last year (if holding period is not integer)
-    months_last_year = ((hold_years - int(hold_years)) * 12)
+    # Calculate months in last year
+    if hold_years == int(hold_years):
+        # Whole number of years: last year has months from January up to acquisition month
+        months_last_year = acquisition_month - 1
+    else:
+        # Fractional holding period: calculate partial final year
+        months_last_year = (hold_years - int(hold_years)) * 12
     
     # Generate annual schedule
     schedule = []
