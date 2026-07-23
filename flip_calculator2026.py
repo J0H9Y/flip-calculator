@@ -781,9 +781,11 @@ def calculate_afa_schedule(total_purchase_price, land_value, land_percentage,
     # Custom useful life from expert appraisal
     custom_annual_afa = None
     custom_nutzungsdauer_active_year = None
+    custom_nutzungsdauer_applied = False
     if custom_nutzungsdauer_active and gutachten_year is not None and gutachten_restnutzungsdauer is not None:
         if gutachten_year >= acquisition_year:
             custom_nutzungsdauer_active_year = gutachten_year - acquisition_year
+            custom_nutzungsdauer_applied = True
     
     for year_offset in range(int(hold_years) + 1):
         year = acquisition_year + year_offset
@@ -902,6 +904,7 @@ def calculate_afa_schedule(total_purchase_price, land_value, land_percentage,
         "afa_rate": afa_rate,
         "afa_description": afa_description,
         "custom_nutzungsdauer_active": custom_nutzungsdauer_active,
+        "custom_nutzungsdauer_applied": custom_nutzungsdauer_applied,
         "gutachten_year": gutachten_year,
         "gutachten_restnutzungsdauer": gutachten_restnutzungsdauer,
         "useful_life_original": useful_life
@@ -1197,8 +1200,10 @@ with col_afa2:
         # Validation
         if gutachten_year < acquisition_year:
             st.error(T["gutachten_year_error"])
+            st.stop()
         if gutachten_restnutzungsdauer <= 0:
             st.error(T["gutachten_duration_error"])
+            st.stop()
 
 with col_afa3:
     marginal_tax_rate = st.slider(
@@ -1488,7 +1493,7 @@ if st.button(T["calc_button"], type="primary"):
         st.dataframe(afa_df, use_container_width=True, hide_index=True)
         
         # Custom useful life summary
-        if afa.get("custom_nutzungsdauer_active") and afa.get("gutachten_year"):
+        if afa.get("custom_nutzungsdauer_applied"):
             st.info(T["custom_nutzungsdauer_summary"].format(
                 year=afa["gutachten_year"],
                 duration=afa["gutachten_restnutzungsdauer"],
