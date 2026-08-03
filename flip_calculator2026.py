@@ -28,13 +28,29 @@ TRANSLATIONS = {
         "exit_subheader": "Exit-Strategie",
         # Input labels
         "buy_price_label": "Kaufpreis (€)",
+        "ownership_share_label": "Dein Eigentumsanteil (%)",
+        "ownership_share_help": "Dein Anteil an der Immobilie (1-100%). Bei 100% bist du alleiniger Eigentümer.",
+        "denkmal_costs_note": "Hinweis: Denkmal-AfA-fähige Sanierungskosten werden automatisch nach deinem Eigentumsanteil skaliert.",
+        "unentgeltlich_erworben_label": "Unentgeltlich erworben (Schenkung/Erbschaft)",
+        "unentgeltlich_erworben_help": "Bei unentgeltlichem Erwerb werden AfA-Basis und Spekulationsfrist vom Rechtsvorgänger übernommen (Fußstapfentheorie).",
+        "predecessor_acquisition_year_label": "Ursprüngliches Erwerbsjahr des Rechtsvorgängers",
+        "predecessor_acquisition_year_help": "Jahr, in dem der Rechtsvorgänger die Immobilie ursprünglich erworben hat.",
+        "predecessor_acquisition_value_label": "Ursprünglicher Anschaffungswert des Rechtsvorgängers (€)",
+        "predecessor_acquisition_value_help": "Anschaffungswert, mit dem der Rechtsvorgänger die Immobilie ursprünglich erworben hat.",
+        "predecessor_afa_claimed_label": "Bereits vom Rechtsvorgänger geltend gemachte AfA (€)",
+        "predecessor_afa_claimed_help": "Summe der AfA, die der Rechtsvorgänger bereits geltend gemacht hat. Muss ≤ Anschaffungswert sein.",
+        "predecessor_afa_error": "Fehler: Die bereits geltend gemachte AfA darf den ursprünglichen Anschaffungswert nicht überschreiten.",
+        "transfer_year_label": "Jahr der Übertragung (Schenkung/Erbschaft)",
+        "transfer_year_help": "Jahr, in dem du die Immobilie unentgeltlich vom Rechtsvorgänger erhalten hast. Die AfA-Tabelle beginnt ab diesem Jahr.",
+        "unentgeltlich_grundst_note": "Bei unentgeltlichem Erwerb (Schenkung/Erbschaft) fällt in der Regel keine Grunderwerbsteuer an (§ 3 GrEStG), sofern es sich um nahe Angehörige handelt.",
+        "unentgeltlich_afa_summary": "AfA-Basis übernommen vom Rechtsvorgänger: Ursprünglicher Anschaffungswert {value}€ ab {year}, bereits {afa}€ abgeschrieben. Spekulationsfrist wird ab {year} berechnet (Fußstapfentheorie, § 23 Abs. 1 Satz 3 EStG).",
         "reno_costs_label": "Renovierungskosten (€)",
         "vat_reclaim_header": "**Vorsteuerabzug**",
         "vat_reclaim_label": "Anrechenbarer Anteil der Renovierungskosten",
         "vat_reclaim_help": "Anteil mit ordnungsgemäßen Rechnungen inkl. MwSt. (19 % erstattungsfähig)",
         "hold_years_label": "Haltedauer (Jahre)",
         "holding_costs_label": "Monatliche Haltekosten (€)",
-        "holding_costs_help": "Zinsen, Nebenkosten, Versicherung usw.",
+        "holding_costs_help": "Zinsen, Nebenkosten, Versicherung usw. Wird automatisch nach Eigentumsanteil skaliert.",
         "strategy_label": "Strategie",
         "strategy_sell": "Verkauf",
         "strategy_rent": "Vermietung",
@@ -211,6 +227,7 @@ TRANSLATIONS = {
         "anschaffungsnahe_percentage": "Renovierungskosten / Gebäudewert: {percentage:.1f}%",
         "gewerblich_warning": "⚠️ Risiko: Gewerblicher Grundstückshandel. Bei 3 oder mehr Objektverkäufen innerhalb von 5 Jahren kann das Finanzamt die Tätigkeit als gewerblich einstufen. Folge: Kein steuerfreier Verkauf nach 10 Jahren, zusätzlich Gewerbesteuer, laufende Buchführungspflicht.",
         "compliance_disclaimer": "Dies ist eine vereinfachte Berechnung ohne Berücksichtigung individueller Umstände (z. B. Gewerblicher Grundstückshandel, anschaffungsnahe Herstellungskosten, Kirchensteuer, Verlustverrechnung). Für verbindliche Aussagen einen Steuerberater konsultieren.",
+        "ownership_share_summary": "Berechnung basiert auf einem Eigentumsanteil von {share}%. Mitverkäufer/Miteigentümer werden nicht separat berechnet — jeder Miteigentümer versteuert seinen Anteil individuell nach eigenem Steuersatz.",
         # Footer
         "footer": """
 💡 **Steuerhinweise (Stand April 2026):**
@@ -243,13 +260,29 @@ Alle Steuerangaben basieren auf 2026-Regeln und können sich ändern. Keine Haft
         "exit_subheader": "Exit Strategy",
         # Input labels
         "buy_price_label": "Buy Price (€)",
+        "ownership_share_label": "Your Ownership Share (%)",
+        "ownership_share_help": "Your share of the property (1-100%). At 100%, you are the sole owner.",
+        "denkmal_costs_note": "Note: Denkmal-AfA-eligible renovation costs are automatically scaled by your ownership share.",
+        "unentgeltlich_erworben_label": "Acquired without consideration (Gift/Inheritance)",
+        "unentgeltlich_erworben_help": "For acquisitions without consideration, AfA basis and speculation period are carried over from the predecessor (Fußstapfentheorie).",
+        "predecessor_acquisition_year_label": "Predecessor's Original Acquisition Year",
+        "predecessor_acquisition_year_help": "Year in which the predecessor originally acquired the property.",
+        "predecessor_acquisition_value_label": "Predecessor's Original Acquisition Value (€)",
+        "predecessor_acquisition_value_help": "Acquisition value with which the predecessor originally acquired the property.",
+        "predecessor_afa_claimed_label": "AfA Already Claimed by Predecessor (€)",
+        "predecessor_afa_claimed_help": "Sum of AfA already claimed by the predecessor. Must be ≤ acquisition value.",
+        "predecessor_afa_error": "Error: The AfA already claimed cannot exceed the original acquisition value.",
+        "transfer_year_label": "Transfer Year (Gift/Inheritance)",
+        "transfer_year_help": "Year in which you received the property without consideration from the predecessor. The AfA table starts from this year.",
+        "unentgeltlich_grundst_note": "For acquisitions without consideration (gift/inheritance), no property transfer tax is due in most cases (§ 3 GrEStG), provided it involves close relatives.",
+        "unentgeltlich_afa_summary": "AfA basis carried over from predecessor: Original acquisition value {value}€ from {year}, {afa}€ already depreciated. Speculation period calculated from {year} (Fußstapfentheorie, § 23 Abs. 1 Satz 3 EStG).",
         "reno_costs_label": "Renovation Costs (€)",
         "vat_reclaim_header": "**VAT Reclaim**",
         "vat_reclaim_label": "Eligible % of Reno Costs",
         "vat_reclaim_help": "% with proper VAT invoices (19% reclaimable)",
         "hold_years_label": "Hold Period (Years)",
         "holding_costs_label": "Monthly Holding Costs (€)",
-        "holding_costs_help": "Interest, utilities, insurance, etc.",
+        "holding_costs_help": "Interest, utilities, insurance, etc. Automatically scaled by ownership share.",
         "strategy_label": "Strategy",
         "strategy_sell": "Sell",
         "strategy_rent": "Rent",
@@ -426,6 +459,7 @@ Alle Steuerangaben basieren auf 2026-Regeln und können sich ändern. Keine Haft
         "anschaffungsnahe_percentage": "Renovation costs / Building value: {percentage:.1f}%",
         "gewerblich_warning": "⚠️ Risk: Commercial property trading. With 3 or more property sales within 5 years, the tax office may reclassify the activity as commercial. Consequence: No tax-free sale after 10 years, additional trade tax, ongoing bookkeeping requirement.",
         "compliance_disclaimer": "This is a simplified calculation without considering individual circumstances (e.g., commercial property trading, acquisition-related production costs, church tax, loss offset). Consult a tax advisor for binding advice.",
+        "ownership_share_summary": "Calculation based on an ownership share of {share}%. Co-owners are not calculated separately — each co-owner taxes their share individually according to their own tax rate.",
         # Footer
         "footer": """
 💡 **Tax Notes (as of April 2026):**
@@ -526,25 +560,63 @@ def calculate_speculation_tax(profit, hold_years, annual_income=50000):
 
 def calculate_sell_scenario(buy_price, reno_costs, holding_costs_monthly, hold_months,
                             sell_price, vat_reclaim_pct, annual_income, use_sell_makler,
-                            eigennutzung=False):
-    grunderwerbsteuer = buy_price * TAX_RATES["grunderwerbsteuer_nrw"]
-    notar_grundbuch = buy_price * TAX_RATES["notar_grundbuch"]
-    makler_buy = buy_price * TAX_RATES["makler_buy"]
+                            eigennutzung=False, ownership_share=100, unentgeltlich_erworben=False,
+                            predecessor_acquisition_year=None, predecessor_acquisition_value=None,
+                            acquisition_year=None):
+    # Scale by ownership share
+    ownership_factor = ownership_share / 100
+    buy_price = buy_price * ownership_factor
+    reno_costs = reno_costs * ownership_factor
+    sell_price = sell_price * ownership_factor
+    holding_costs_monthly = holding_costs_monthly * ownership_factor
+    
+    # Determine tax basis for taxable gain calculations (§ 23 Abs. 1 Satz 3 EStG - Fußstapfentheorie)
+    if unentgeltlich_erworben and predecessor_acquisition_value is not None:
+        tax_basis_value = predecessor_acquisition_value * ownership_factor
+    else:
+        tax_basis_value = buy_price
+    
+    # Zero out transaction costs for unentgeltlicher Erwerb (§ 3 GrEStG)
+    if unentgeltlich_erworben:
+        grunderwerbsteuer = 0
+        notar_grundbuch = 0
+        makler_buy = 0
+    else:
+        grunderwerbsteuer = buy_price * TAX_RATES["grunderwerbsteuer_nrw"]
+        notar_grundbuch = buy_price * TAX_RATES["notar_grundbuch"]
+        makler_buy = buy_price * TAX_RATES["makler_buy"]
     acquisition_costs = grunderwerbsteuer + notar_grundbuch + makler_buy
     total_holding_costs = holding_costs_monthly * hold_months
     vat_reclaim = reno_costs * vat_reclaim_pct * TAX_RATES["vat_rate"]
-    total_investment = buy_price + reno_costs + acquisition_costs + total_holding_costs - vat_reclaim
+    
+    # Taxable investment basis (for § 23 EStG calculations)
+    tax_investment = tax_basis_value + reno_costs + acquisition_costs + total_holding_costs - vat_reclaim
+    
+    # Economic investment (user's actual out-of-pocket costs, for personal ROI)
+    # For unentgeltlicher Erwerb, this excludes the property acquisition cost (which was paid by predecessor)
+    if unentgeltlich_erworben:
+        economic_investment = reno_costs + total_holding_costs - vat_reclaim
+    else:
+        economic_investment = buy_price + reno_costs + acquisition_costs + total_holding_costs - vat_reclaim
     makler_sell = sell_price * TAX_RATES["makler_sell"] if use_sell_makler else 0
     selling_costs = makler_sell
-    gross_profit = sell_price - total_investment - selling_costs
+    gross_profit = sell_price - tax_investment - selling_costs
     hold_years = hold_months / 12
+    
+    # Calculate effective holding period for Spekulationsfrist (Fußstapfentheorie)
+    effective_hold_years_for_spekulationsfrist = hold_years
+    if unentgeltlich_erworben and predecessor_acquisition_year is not None and acquisition_year is not None:
+        # For unentgeltlicher Erwerb, calculate sale year from effective_acquisition_year
+        sale_year = acquisition_year + hold_years
+        effective_hold_years_for_spekulationsfrist = sale_year - predecessor_acquisition_year
+    
     # § 23 EStG Eigennutzung-Ausnahme: steuerfrei bei Selbstnutzung im Verkaufsjahr + 2 Vorjahre
     if eigennutzung:
         speculation_tax, spec_tax_rate = 0, 0
     else:
-        speculation_tax, spec_tax_rate = calculate_speculation_tax(gross_profit, hold_years, annual_income)
+        speculation_tax, spec_tax_rate = calculate_speculation_tax(gross_profit, effective_hold_years_for_spekulationsfrist, annual_income)
     net_profit = gross_profit - speculation_tax
-    roi = (net_profit / total_investment * 100) if total_investment > 0 else 0
+    roi = (net_profit / economic_investment * 100) if economic_investment > 0 else 0
     annual_roi = (roi / hold_years) if hold_years > 0 else 0
     return {
         "acquisition": {
@@ -552,7 +624,13 @@ def calculate_sell_scenario(buy_price, reno_costs, holding_costs_monthly, hold_m
             "notar_grundbuch": notar_grundbuch,
             "makler": makler_buy
         },
-        "total_investment": total_investment,
+        "buy_price_scaled": buy_price,
+        "tax_basis_value": tax_basis_value,
+        "tax_investment": tax_investment,
+        "economic_investment": economic_investment,
+        "reno_costs_scaled": reno_costs,
+        "sell_price_scaled": sell_price,
+        "total_investment": economic_investment,  # Kept for backward compatibility, now equals economic_investment
         "vat_reclaim": vat_reclaim,
         "holding_costs": total_holding_costs,
         "selling_costs": selling_costs,
@@ -562,17 +640,39 @@ def calculate_sell_scenario(buy_price, reno_costs, holding_costs_monthly, hold_m
         "net_profit": net_profit,
         "roi": roi,
         "annual_roi": annual_roi,
-        "hold_years": hold_years
+        "hold_years": hold_years,
+        "effective_hold_years_for_spekulationsfrist": effective_hold_years_for_spekulationsfrist
     }
 
 def calculate_rent_scenario(buy_price, reno_costs, holding_costs_monthly, hold_months,
-                            monthly_rent, vacancy_rate, annual_income, vat_reclaim_pct):
-    grunderwerbsteuer = buy_price * TAX_RATES["grunderwerbsteuer_nrw"]
-    notar_grundbuch = buy_price * TAX_RATES["notar_grundbuch"]
-    makler_buy = buy_price * TAX_RATES["makler_buy"]
+                            monthly_rent, vacancy_rate, annual_income, vat_reclaim_pct,
+                            ownership_share=100, unentgeltlich_erworben=False,
+                            predecessor_acquisition_value=None):
+    # Scale by ownership share
+    ownership_factor = ownership_share / 100
+    buy_price = buy_price * ownership_factor
+    reno_costs = reno_costs * ownership_factor
+    monthly_rent = monthly_rent * ownership_factor
+    holding_costs_monthly = holding_costs_monthly * ownership_factor
+    
+    # Zero out transaction costs for unentgeltlicher Erwerb (§ 3 GrEStG)
+    if unentgeltlich_erworben:
+        grunderwerbsteuer = 0
+        notar_grundbuch = 0
+        makler_buy = 0
+    else:
+        grunderwerbsteuer = buy_price * TAX_RATES["grunderwerbsteuer_nrw"]
+        notar_grundbuch = buy_price * TAX_RATES["notar_grundbuch"]
+        makler_buy = buy_price * TAX_RATES["makler_buy"]
     acquisition_costs = grunderwerbsteuer + notar_grundbuch + makler_buy
     vat_reclaim = reno_costs * vat_reclaim_pct * TAX_RATES["vat_rate"]
-    total_investment = buy_price + reno_costs + acquisition_costs - vat_reclaim
+    
+    # Economic investment (user's actual out-of-pocket costs, for yield calculations)
+    # For unentgeltlicher Erwerb, this excludes the property acquisition cost (which was paid by predecessor)
+    if unentgeltlich_erworben:
+        economic_investment = reno_costs + acquisition_costs - vat_reclaim
+    else:
+        economic_investment = buy_price + reno_costs + acquisition_costs - vat_reclaim
     hold_years = hold_months / 12
     annual_rent_gross = monthly_rent * 12 * (1 - vacancy_rate)
     total_rent_gross = annual_rent_gross * hold_years
@@ -586,15 +686,19 @@ def calculate_rent_scenario(buy_price, reno_costs, holding_costs_monthly, hold_m
     total_tax_on_rent = annual_tax_on_rent * hold_years
     annual_cashflow = annual_rent_net - annual_tax_on_rent
     total_cashflow = annual_cashflow * hold_years
-    gross_yield = (annual_rent_gross / total_investment * 100) if total_investment > 0 else 0
-    net_yield = (annual_cashflow / total_investment * 100) if total_investment > 0 else 0
+    gross_yield = (annual_rent_gross / economic_investment * 100) if economic_investment > 0 else 0
+    net_yield = (annual_cashflow / economic_investment * 100) if economic_investment > 0 else 0
     return {
         "acquisition": {
             "grunderwerbsteuer": grunderwerbsteuer,
             "notar_grundbuch": notar_grundbuch,
             "makler": makler_buy
         },
-        "total_investment": total_investment,
+        "buy_price_scaled": buy_price,
+        "economic_investment": economic_investment,
+        "total_investment": economic_investment,  # Kept for backward compatibility, now equals economic_investment
+        "reno_costs_scaled": reno_costs,
+        "monthly_rent_scaled": monthly_rent,
         "vat_reclaim": vat_reclaim,
         "annual_rent_gross": annual_rent_gross,
         "annual_operating_costs": annual_operating_costs,
@@ -609,19 +713,39 @@ def calculate_rent_scenario(buy_price, reno_costs, holding_costs_monthly, hold_m
     }
 
 def check_anschaffungsnahe_herstellungskosten(buy_price, land_value, land_percentage, 
-                                              reno_costs, vat_option_active, vat_rate=0.19):
+                                              reno_costs, vat_option_active, vat_reclaim_pct=0,
+                                              vat_rate=0.19, ownership_share=100,
+                                              unentgeltlich_erworben=False,
+                                              predecessor_acquisition_value=None):
     """
     Check if renovation costs exceed 15% of building value within 3 years of purchase (§ 6 Abs. 1 Nr. 1a EStG).
+    
+    Args:
+        vat_reclaim_pct: Percentage of renovation costs eligible for VAT reclaim (e.g., 0.70 for 70%)
+        unentgeltlich_erworben: Whether property was acquired without consideration
+        predecessor_acquisition_value: Original acquisition value of predecessor (for Fußstapfentheorie)
     
     Returns:
         Dictionary with check results
     """
+    # Scale by ownership share for consistency with other calculations
+    ownership_factor = ownership_share / 100
+    buy_price = buy_price * ownership_factor
+    reno_costs = reno_costs * ownership_factor
+    
+    # Determine basis for building value calculation (Fußstapfentheorie for unentgeltlicher Erwerb)
+    if unentgeltlich_erworben and predecessor_acquisition_value is not None:
+        basis_value = predecessor_acquisition_value * ownership_factor
+    else:
+        basis_value = buy_price
+    
     # Calculate building value
     if land_value is not None and land_value > 0:
-        building_value = buy_price - land_value
+        land_value_scaled = land_value * ownership_factor
+        building_value = basis_value - land_value_scaled
     else:
-        land_value_final = buy_price * (land_percentage / 100)
-        building_value = buy_price - land_value_final
+        land_value_final = basis_value * (land_percentage / 100)
+        building_value = basis_value - land_value_final
     
     if building_value <= 0:
         return {
@@ -632,9 +756,9 @@ def check_anschaffungsnahe_herstellungskosten(buy_price, land_value, land_percen
             "reno_costs_net": 0
         }
     
-    # Calculate renovation costs net of VAT
+    # Calculate renovation costs net of VAT (using vat_reclaim_pct, not flat reduction)
     if vat_option_active:
-        reno_costs_net = reno_costs * (1 - vat_rate)
+        reno_costs_net = reno_costs * (1 - vat_reclaim_pct * vat_rate)
     else:
         reno_costs_net = reno_costs
     
@@ -671,12 +795,33 @@ def check_gewerblicher_grundstueckshandel(properties_sold_5y, hold_years):
     }
 
 def calculate_breakeven_hold_period(buy_price, reno_costs, holding_costs_monthly,
-                                    monthly_rent, vacancy_rate, annual_income, vat_reclaim_pct):
-    grunderwerbsteuer = buy_price * TAX_RATES["grunderwerbsteuer_nrw"]
-    notar_grundbuch = buy_price * TAX_RATES["notar_grundbuch"]
-    makler_buy = buy_price * TAX_RATES["makler_buy"]
+                                    monthly_rent, vacancy_rate, annual_income, vat_reclaim_pct,
+                                    ownership_share=100, unentgeltlich_erworben=False,
+                                    predecessor_acquisition_value=None):
+    # Scale by ownership share
+    ownership_factor = ownership_share / 100
+    buy_price = buy_price * ownership_factor
+    reno_costs = reno_costs * ownership_factor
+    monthly_rent = monthly_rent * ownership_factor
+    
+    # Zero out transaction costs for unentgeltlicher Erwerb (§ 3 GrEStG)
+    if unentgeltlich_erworben:
+        grunderwerbsteuer = 0
+        notar_grundbuch = 0
+        makler_buy = 0
+    else:
+        grunderwerbsteuer = buy_price * TAX_RATES["grunderwerbsteuer_nrw"]
+        notar_grundbuch = buy_price * TAX_RATES["notar_grundbuch"]
+        makler_buy = buy_price * TAX_RATES["makler_buy"]
+    acquisition_costs = grunderwerbsteuer + notar_grundbuch + makler_buy
     vat_reclaim = reno_costs * vat_reclaim_pct * TAX_RATES["vat_rate"]
-    total_investment = buy_price + reno_costs + grunderwerbsteuer + notar_grundbuch + makler_buy - vat_reclaim
+    
+    # Economic investment (user's actual out-of-pocket costs, for breakeven calculation)
+    # For unentgeltlicher Erwerb, this excludes the property acquisition cost (which was paid by predecessor)
+    if unentgeltlich_erworben:
+        economic_investment = reno_costs + acquisition_costs - vat_reclaim
+    else:
+        economic_investment = buy_price + reno_costs + acquisition_costs - vat_reclaim
     monthly_rent_gross = monthly_rent * (1 - vacancy_rate)
     monthly_operating_costs = monthly_rent_gross * 0.25
     monthly_net = monthly_rent_gross - monthly_operating_costs - holding_costs_monthly
@@ -686,7 +831,7 @@ def calculate_breakeven_hold_period(buy_price, reno_costs, holding_costs_monthly
     monthly_cashflow = monthly_net - monthly_tax
     if monthly_cashflow <= 0:
         return None
-    return total_investment / monthly_cashflow
+    return economic_investment / monthly_cashflow
 
 # ──────────────────────────────────────────────
 # AfA (DEPRECIATION) FUNCTIONS
@@ -709,18 +854,24 @@ def calculate_afa_schedule(total_purchase_price, land_value, land_percentage,
                            annual_income,
                            custom_nutzungsdauer_active=False,
                            gutachten_year=None,
-                           gutachten_restnutzungsdauer=None):
+                           gutachten_restnutzungsdauer=None,
+                           ownership_share=100,
+                           unentgeltlich_erworben=False,
+                           predecessor_acquisition_year=None,
+                           predecessor_acquisition_value=None,
+                           predecessor_afa_claimed=None):
     """
     Calculate annual AfA schedule with pro-rating for partial years.
     Handles both normal linear AfA and Denkmal-AfA separately.
     Supports custom useful life based on expert appraisal (§ 7 Abs. 4 Satz 2 EStG).
+    Supports unentgeltlicher Erwerb (gift/inheritance) with Fußstapfentheorie.
     
     Args:
         total_purchase_price: Total purchase price
         land_value: Explicit land value (or None for automatic split)
         land_percentage: Land percentage for automatic split (default 20%)
         construction_year: Year building was completed
-        acquisition_year: Year of acquisition
+        acquisition_year: Effective year of acquisition (transfer_year if unentgeltlich_erworben, else Kaufjahr)
         acquisition_month: Month of acquisition (1-12)
         denkmal_costs: Certified renovation costs for Denkmal-AfA
         marginal_tax_rate: User's marginal tax rate (as percentage)
@@ -729,20 +880,48 @@ def calculate_afa_schedule(total_purchase_price, land_value, land_percentage,
         custom_nutzungsdauer_active: Whether to use custom useful life from expert appraisal
         gutachten_year: Year when expert appraisal was recognized
         gutachten_restnutzungsdauer: Remaining useful life per expert appraisal (years)
+        ownership_share: User's ownership share percentage (1-100)
+        unentgeltlich_erworben: Whether property was acquired without consideration
+        predecessor_acquisition_year: Original acquisition year of predecessor
+        predecessor_acquisition_value: Original acquisition value of predecessor
+        predecessor_afa_claimed: AfA already claimed by predecessor
     
     Returns:
         Dictionary with AfA schedule and summary
     """
     
+    # Scale by ownership share
+    ownership_factor = ownership_share / 100
+    total_purchase_price = total_purchase_price * ownership_factor
+    denkmal_costs = denkmal_costs * ownership_factor
+    
     # Determine building value and land value
-    if land_value is not None and land_value > 0:
-        # Explicit land value provided
-        building_value = total_purchase_price - land_value
-        land_value_final = land_value
+    if unentgeltlich_erworben and predecessor_acquisition_value is not None:
+        # Use predecessor's acquisition value as basis (Fußstapfentheorie)
+        total_purchase_price = predecessor_acquisition_value * ownership_factor
+        if land_value is not None and land_value > 0:
+            # Explicit land value provided - scale by ownership factor
+            land_value_scaled = land_value * ownership_factor
+            building_value = total_purchase_price - land_value_scaled
+            land_value_final = land_value_scaled
+        else:
+            # Automatic split based on percentage
+            land_value_final = total_purchase_price * (land_percentage / 100)
+            building_value = total_purchase_price - land_value_final
+        # Adjust for AfA already claimed by predecessor
+        if predecessor_afa_claimed is not None:
+            building_value = building_value - (predecessor_afa_claimed * ownership_factor)
     else:
-        # Automatic split based on percentage
-        land_value_final = total_purchase_price * (land_percentage / 100)
-        building_value = total_purchase_price - land_value_final
+        # Normal acquisition
+        if land_value is not None and land_value > 0:
+            # Explicit land value provided - scale by ownership factor
+            land_value_scaled = land_value * ownership_factor
+            building_value = total_purchase_price - land_value_scaled
+            land_value_final = land_value_scaled
+        else:
+            # Automatic split based on percentage
+            land_value_final = total_purchase_price * (land_percentage / 100)
+            building_value = total_purchase_price - land_value_final
     
     # Get normal AfA rate
     afa_rate, useful_life, afa_description = get_afa_rate(construction_year)
@@ -912,12 +1091,19 @@ def calculate_afa_schedule(total_purchase_price, land_value, land_percentage,
 
 def calculate_sell_scenario_with_afa(buy_price, reno_costs, holding_costs_monthly, hold_months,
                                      sell_price, vat_reclaim_pct, annual_income, use_sell_makler,
-                                     eigennutzung=False, afa_schedule=None):
+                                     eigennutzung=False, afa_schedule=None, ownership_share=100,
+                                     unentgeltlich_erworben=False, predecessor_acquisition_year=None,
+                                     predecessor_acquisition_value=None, acquisition_year=None):
     """
     Calculate sell scenario with AfA recapture integration.
     
     Args:
         afa_schedule: AfA schedule from calculate_afa_schedule (optional)
+        ownership_share: User's ownership share percentage (1-100)
+        unentgeltlich_erworben: Whether property was acquired without consideration
+        predecessor_acquisition_year: Original acquisition year of predecessor
+        predecessor_acquisition_value: Original acquisition value of predecessor
+        acquisition_year: Current owner's acquisition year
     
     Returns:
         Enhanced sell scenario results with AfA recapture
@@ -926,8 +1112,20 @@ def calculate_sell_scenario_with_afa(buy_price, reno_costs, holding_costs_monthl
     result = calculate_sell_scenario(
         buy_price, reno_costs, holding_costs_monthly, hold_months,
         sell_price, vat_reclaim_pct, annual_income, use_sell_makler,
-        eigennutzung=eigennutzung
+        eigennutzung=eigennutzung, ownership_share=ownership_share,
+        unentgeltlich_erworben=unentgeltlich_erworben,
+        predecessor_acquisition_year=predecessor_acquisition_year,
+        predecessor_acquisition_value=predecessor_acquisition_value,
+        acquisition_year=acquisition_year
     )
+    
+    # Calculate effective holding period for Spekulationsfrist (Fußstapfentheorie)
+    hold_years = hold_months / 12
+    effective_hold_years_for_spekulationsfrist = hold_years
+    if unentgeltlich_erworben and predecessor_acquisition_year is not None and acquisition_year is not None:
+        # For unentgeltlicher Erwerb, calculate sale year from effective_acquisition_year
+        sale_year = acquisition_year + hold_years
+        effective_hold_years_for_spekulationsfrist = sale_year - predecessor_acquisition_year
     
     # Add AfA recapture if schedule provided
     if afa_schedule:
@@ -942,9 +1140,8 @@ def calculate_sell_scenario_with_afa(buy_price, reno_costs, holding_costs_monthl
         # Taxable gain with AfA recapture
         taxable_gain_with_recapture = original_gross_profit + total_afa_claimed
         
-        # Recalculate speculation tax with recapture
-        hold_years = hold_months / 12
-        if eigennutzung or hold_years >= 10:
+        # Recalculate speculation tax with recapture (use effective hold years for Fußstapfentheorie)
+        if eigennutzung or effective_hold_years_for_spekulationsfrist >= 10:
             speculation_tax_with_recapture = 0
             spec_tax_rate_with_recapture = 0
         elif taxable_gain_with_recapture <= 0:
@@ -985,12 +1182,16 @@ def calculate_sell_scenario_with_afa(buy_price, reno_costs, holding_costs_monthl
 
 def calculate_rent_scenario_with_afa(buy_price, reno_costs, holding_costs_monthly, hold_months,
                                       monthly_rent, vacancy_rate, annual_income, vat_reclaim_pct,
-                                      afa_schedule=None):
+                                      afa_schedule=None, ownership_share=100,
+                                      unentgeltlich_erworben=False, predecessor_acquisition_value=None):
     """
     Calculate rent scenario with AfA tax shield integration.
     
     Args:
         afa_schedule: AfA schedule from calculate_afa_schedule (optional)
+        ownership_share: User's ownership share percentage (1-100)
+        unentgeltlich_erworben: Whether property was acquired without consideration
+        predecessor_acquisition_value: Original acquisition value of predecessor
     
     Returns:
         Enhanced rent scenario results with AfA tax benefits
@@ -998,7 +1199,10 @@ def calculate_rent_scenario_with_afa(buy_price, reno_costs, holding_costs_monthl
     # Base calculation
     result = calculate_rent_scenario(
         buy_price, reno_costs, holding_costs_monthly, hold_months,
-        monthly_rent, vacancy_rate, annual_income, vat_reclaim_pct
+        monthly_rent, vacancy_rate, annual_income, vat_reclaim_pct,
+        ownership_share=ownership_share,
+        unentgeltlich_erworben=unentgeltlich_erworben,
+        predecessor_acquisition_value=predecessor_acquisition_value
     )
     
     # Add AfA tax shield if schedule provided
@@ -1077,8 +1281,45 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
     st.subheader(T["purchase_subheader"])
-    buy_price = st.number_input(T["buy_price_label"], min_value=0, max_value=2000000,
-                                value=250000, step=10000)
+    ownership_share = st.slider(T["ownership_share_label"], 1, 100, 100, 1,
+                                help=T["ownership_share_help"])
+    unentgeltlich_erworben = st.checkbox(T["unentgeltlich_erworben_label"], value=False,
+                                         help=T["unentgeltlich_erworben_help"])
+    # Hide Kaufpreis input when unentgeltlich_erworben is checked
+    if unentgeltlich_erworben:
+        buy_price = 0  # Not used in calculations when unentgeltlich_erworben
+    else:
+        buy_price = st.number_input(T["buy_price_label"], min_value=0, max_value=2000000,
+                                    value=250000, step=10000)
+    predecessor_acquisition_year = None
+    predecessor_acquisition_value = None
+    predecessor_afa_claimed = None
+    transfer_year = None
+    if unentgeltlich_erworben:
+        st.info(T["unentgeltlich_grundst_note"])
+        predecessor_acquisition_year = st.number_input(
+            T["predecessor_acquisition_year_label"],
+            min_value=1900, max_value=2050, value=2000, step=1,
+            help=T["predecessor_acquisition_year_help"]
+        )
+        predecessor_acquisition_value = st.number_input(
+            T["predecessor_acquisition_value_label"],
+            min_value=0, max_value=2000000, value=200000, step=1000,
+            help=T["predecessor_acquisition_value_help"]
+        )
+        predecessor_afa_claimed = st.number_input(
+            T["predecessor_afa_claimed_label"],
+            min_value=0, max_value=2000000, value=0, step=1000,
+            help=T["predecessor_afa_claimed_help"]
+        )
+        transfer_year = st.number_input(
+            T["transfer_year_label"],
+            min_value=1900, max_value=2050, value=2020, step=1,
+            help=T["transfer_year_help"]
+        )
+        if predecessor_afa_claimed > predecessor_acquisition_value:
+            st.error(T["predecessor_afa_error"])
+            st.stop()
     reno_costs = st.number_input(T["reno_costs_label"], min_value=0, max_value=500000,
                                  value=50000, step=5000)
     st.markdown(T["vat_reclaim_header"])
@@ -1153,11 +1394,15 @@ with col_afa1:
         min_value=1800, max_value=2030, value=1990, step=1,
         help=T["construction_year_help"]
     )
-    acquisition_year = st.number_input(
-        T["acquisition_year_label"],
-        min_value=2000, max_value=2030, value=2024, step=1,
-        help=T["acquisition_year_help"]
-    )
+    # Hide Kaufjahr input when unentgeltlich_erworben is checked
+    if unentgeltlich_erworben:
+        acquisition_year = transfer_year if transfer_year is not None else 2024
+    else:
+        acquisition_year = st.number_input(
+            T["acquisition_year_label"],
+            min_value=2000, max_value=2030, value=2024, step=1,
+            help=T["acquisition_year_help"]
+        )
     acquisition_month = st.selectbox(
         T["acquisition_month_label"],
         options=list(range(1, 13)),
@@ -1180,6 +1425,8 @@ with col_afa2:
         min_value=0, max_value=500000, value=0, step=1000,
         help=T["denkmal_costs_help"]
     )
+    if denkmal_costs > 0:
+        st.caption(T["denkmal_costs_note"])
     custom_nutzungsdauer_active = st.checkbox(
         T["custom_nutzungsdauer_label"], value=False,
         help=T["custom_nutzungsdauer_help"]
@@ -1197,8 +1444,9 @@ with col_afa2:
             min_value=0.1, max_value=100.0, value=20.0, step=0.5,
             help=T["gutachten_restnutzungsdauer_help"]
         )
-        # Validation
-        if gutachten_year < acquisition_year:
+        # Validation - use effective_acquisition_year for unentgeltlich_erworben
+        effective_acquisition_year_for_gutachten = transfer_year if unentgeltlich_erworben else acquisition_year
+        if gutachten_year < effective_acquisition_year_for_gutachten:
             st.error(T["gutachten_year_error"])
             st.stop()
         if gutachten_restnutzungsdauer <= 0:
@@ -1231,6 +1479,9 @@ if denkmal_costs > 0:
 if st.button(T["calc_button"], type="primary"):
 
     results = {}
+    
+    # Compute single effective_acquisition_year for all calculations
+    effective_acquisition_year = transfer_year if unentgeltlich_erworben else acquisition_year
 
     # Calculate AfA schedule first
     afa_schedule = calculate_afa_schedule(
@@ -1238,7 +1489,7 @@ if st.button(T["calc_button"], type="primary"):
         land_value=land_value if land_value > 0 else None,
         land_percentage=land_percentage,
         construction_year=construction_year,
-        acquisition_year=acquisition_year,
+        acquisition_year=effective_acquisition_year,
         acquisition_month=acquisition_month,
         denkmal_costs=denkmal_costs,
         marginal_tax_rate=marginal_tax_rate,
@@ -1246,7 +1497,12 @@ if st.button(T["calc_button"], type="primary"):
         annual_income=annual_income,
         custom_nutzungsdauer_active=custom_nutzungsdauer_active,
         gutachten_year=gutachten_year,
-        gutachten_restnutzungsdauer=gutachten_restnutzungsdauer
+        gutachten_restnutzungsdauer=gutachten_restnutzungsdauer,
+        ownership_share=ownership_share,
+        unentgeltlich_erworben=unentgeltlich_erworben,
+        predecessor_acquisition_year=predecessor_acquisition_year,
+        predecessor_acquisition_value=predecessor_acquisition_value,
+        predecessor_afa_claimed=predecessor_afa_claimed
     )
 
     if scenario_type in ["Sell", "Compare Both"]:
@@ -1254,18 +1510,29 @@ if st.button(T["calc_button"], type="primary"):
             buy_price, reno_costs, holding_costs_monthly, hold_months,
             sell_price, vat_reclaim_pct, annual_income, use_sell_makler,
             eigennutzung=eigennutzung,
-            afa_schedule=afa_schedule
+            afa_schedule=afa_schedule,
+            ownership_share=ownership_share,
+            unentgeltlich_erworben=unentgeltlich_erworben,
+            predecessor_acquisition_year=predecessor_acquisition_year,
+            predecessor_acquisition_value=predecessor_acquisition_value,
+            acquisition_year=effective_acquisition_year
         )
 
     if scenario_type in ["Rent", "Compare Both"]:
         results["rent"] = calculate_rent_scenario_with_afa(
             buy_price, reno_costs, holding_costs_monthly, hold_months,
             monthly_rent, vacancy_rate, annual_income, vat_reclaim_pct,
-            afa_schedule=afa_schedule if use_afa else None
+            afa_schedule=afa_schedule if use_afa else None,
+            ownership_share=ownership_share,
+            unentgeltlich_erworben=unentgeltlich_erworben,
+            predecessor_acquisition_value=predecessor_acquisition_value
         )
         results["breakeven_months"] = calculate_breakeven_hold_period(
             buy_price, reno_costs, holding_costs_monthly,
-            monthly_rent, vacancy_rate, annual_income, vat_reclaim_pct
+            monthly_rent, vacancy_rate, annual_income, vat_reclaim_pct,
+            ownership_share=ownership_share,
+            unentgeltlich_erworben=unentgeltlich_erworben,
+            predecessor_acquisition_value=predecessor_acquisition_value
         )
     
     # Store AfA schedule in results for display
@@ -1275,7 +1542,10 @@ if st.button(T["calc_button"], type="primary"):
     compliance_checks = {}
     compliance_checks["anschaffungsnahe"] = check_anschaffungsnahe_herstellungskosten(
         buy_price, land_value if land_value > 0 else None, land_percentage,
-        reno_costs, vat_option_active
+        reno_costs, vat_option_active, vat_reclaim_pct=vat_reclaim_pct,
+        ownership_share=ownership_share,
+        unentgeltlich_erworben=unentgeltlich_erworben,
+        predecessor_acquisition_value=predecessor_acquisition_value
     )
     compliance_checks["gewerblich"] = check_gewerblicher_grundstueckshandel(
         properties_sold_5y, hold_years_input
@@ -1332,29 +1602,37 @@ if st.button(T["calc_button"], type="primary"):
                 st.write(f"• Notar/Grundbuch (~1,5 %): €{sell['acquisition']['notar_grundbuch']:,.0f}")
                 st.write(f"• Maklerprovision Kauf (3,57 %): €{sell['acquisition']['makler']:,.0f}")
                 st.markdown(T["investment"])
-                st.write(f"{T['buy_price_line']}: €{buy_price:,.0f}")
-                st.write(f"{T['reno_line']}: €{reno_costs:,.0f}")
+                # Show dual-basis display when unentgeltlich_erworben
+                if unentgeltlich_erworben:
+                    st.write(f"**Steuerlich relevante Anschaffungskosten (Rechtsvorgänger):** €{sell['tax_basis_value']:,.0f}")
+                    st.write(f"**Deine eigene Investition:** €{sell['economic_investment']:,.0f}")
+                    st.caption("Der Rohgewinn wird auf Basis der Anschaffungskosten des Rechtsvorgängers berechnet (Fußstapfentheorie); deine persönliche Rendite basiert auf deiner tatsächlichen Investition.")
+                else:
+                    st.write(f"{T['buy_price_line']}: €{sell['buy_price_scaled']:,.0f}")
+                st.write(f"{T['reno_line']}: €{sell['reno_costs_scaled']:,.0f}")
                 st.write(f"{T['vat_line']}: -€{sell['vat_reclaim']:,.0f}")
                 st.write(f"{T['holding_line']}: €{sell['holding_costs']:,.0f}")
                 st.write(f"{T['total_investment_line']}: €{sell['total_investment']:,.0f}**")
             with c2:
                 st.markdown(T["exit_label"])
-                st.write(f"{T['sell_price_line']}: €{sell_price:,.0f}")
+                st.write(f"{T['sell_price_line']}: €{sell['sell_price_scaled']:,.0f}")
                 st.write(f"{T['selling_costs_line']}: €{sell['selling_costs']:,.0f}")
                 st.write(f"{T['gross_profit_line']}: €{sell['gross_profit']:,.0f}")
                 st.write(f"{T['spec_tax_line']}: €{sell['speculation_tax']:,.0f}")
                 st.write(f"{T['net_profit_line']}: €{sell['net_profit']:,.0f}**")
 
                 st.markdown(T["tax_info"])
-                if sell['hold_years'] < 10:
+                # Use effective hold years for Spekulationsfrist display when unentgeltlich_erworben
+                display_hold_years = sell.get('effective_hold_years_for_spekulationsfrist', sell['hold_years'])
+                if display_hold_years < 10:
                     if sell['speculation_tax'] == 0 and sell['gross_profit'] <= 0:
                         st.info(T["loss_restriction_note"])
                     else:
-                        st.warning(T["spec_tax_warning"].format(years=sell['hold_years']))
+                        st.warning(T["spec_tax_warning"].format(years=display_hold_years))
                         st.write(T["spec_tax_rate_line"].format(rate=sell['spec_tax_rate']))
                         st.caption(T["spec_tax_rate_note"])
                 else:
-                    st.success(T["tax_free_success"].format(years=sell['hold_years']))
+                    st.success(T["tax_free_success"].format(years=display_hold_years))
 
     # ── RENT results ────────────────────────────
     if "rent" in results:
@@ -1382,7 +1660,12 @@ if st.button(T["calc_button"], type="primary"):
             c1, c2 = st.columns(2)
             with c1:
                 st.markdown(T["invest_same"])
-                st.write(f"{T['total_invest_line']}: €{rent['total_investment']:,.0f}")
+                # Show economic_investment when unentgeltlich_erworben
+                if unentgeltlich_erworben:
+                    st.write(f"**Deine eigene Investition:** €{rent['economic_investment']:,.0f}")
+                    st.caption("Die Rendite basiert auf deiner tatsächlichen Investition (ohne Anschaffungskosten des Rechtsvorgängers).")
+                else:
+                    st.write(f"{T['total_invest_line']}: €{rent['total_investment']:,.0f}")
                 st.write(f"{T['vat_reclaim_line']}: €{rent['vat_reclaim']:,.0f}")
                 st.markdown(T["annual_income_section"])
                 st.write(f"{T['gross_rent_line']}: €{rent['annual_rent_gross']:,.0f}")
@@ -1461,6 +1744,18 @@ if st.button(T["calc_button"], type="primary"):
         st.markdown("---")
         st.header(T["afa_header"])
         st.markdown(T["afa_subheader"])
+        
+        # Ownership share summary
+        if ownership_share < 100:
+            st.info(T["ownership_share_summary"].format(share=ownership_share))
+        
+        # Unentgeltlicher Erwerb summary
+        if unentgeltlich_erworben and predecessor_acquisition_value is not None:
+            st.info(T["unentgeltlich_afa_summary"].format(
+                value=predecessor_acquisition_value,
+                year=predecessor_acquisition_year,
+                afa=predecessor_afa_claimed if predecessor_afa_claimed else 0
+            ))
         
         afa = results["afa"]
         
@@ -1563,7 +1858,13 @@ if st.button(T["calc_button"], type="primary"):
                 "properties_sold_5y": properties_sold_5y,
                 "custom_nutzungsdauer_active": custom_nutzungsdauer_active,
                 "gutachten_year": gutachten_year,
-                "gutachten_restnutzungsdauer": gutachten_restnutzungsdauer
+                "gutachten_restnutzungsdauer": gutachten_restnutzungsdauer,
+                "ownership_share": ownership_share,
+                "unentgeltlich_erworben": unentgeltlich_erworben,
+                "predecessor_acquisition_year": predecessor_acquisition_year,
+                "predecessor_acquisition_value": predecessor_acquisition_value,
+                "predecessor_afa_claimed": predecessor_afa_claimed,
+                "transfer_year": transfer_year
             },
             "results": results,
             "created": datetime.now().isoformat()
